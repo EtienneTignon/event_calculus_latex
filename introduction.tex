@@ -1,1 +1,28 @@
-\section{Introduction}\label{sec:introduction}
+\section{MAPF in event Calculus}\label{sec:introduction}
+
+Given a graph $G = <V,E>$ and a list of agent $R$.
+
+\subsection{Fluents and Events}
+
+Event calculus is a sorted predicate calculus (with equality). There are the sorts:
+
+\begin{itemize}
+  \item Timepoints : $\mathcal{T} = [0, 1, ... h]$.
+  \item Fluents : $\forall r \in R, \forall v \in V, on(r,v) \in \mathcal{F}$ .
+  \item Actions : $\forall r \in R, \forall <v_o,v_d> \in E, move(r,v_o,v_e) \in \mathcal{A}$.
+  \item Domain object : $\mathcal{X} = [x_0, x_1, .. x_n]$.
+\end{itemize}
+
+\subsection{The five predicates}
+
+\begin{itemize}
+  \item $happens \subseteq \mathcal{A}*\mathcal{T}$
+  \item $holds\_at \subseteq \mathcal{F}*\mathcal{T}$
+  \item $initiates \subseteq \mathcal{A}*\mathcal{F}*\mathcal{T}$
+  \item $terminates \subseteq \mathcal{A}*\mathcal{F}*\mathcal{T}$
+  \item $<\ \subseteq \mathcal{T}*\mathcal{T}$
+\end{itemize}
+
+\subsection{Domain independant axioms}
+
+$$holds\_at(f,t_h) \leftarrow [happens(a,t_a)\ \land\ initiates(a,f,t_a)\ \land\ t_a<t_h\ \land\ other things probably]$$
