@@ -1,6 +1,6 @@
 \section{MAPF in event Calculus}\label{sec:introduction}
 
-Given a graph $G = <V,E>$ and a list of agent $R$.
+Given a graph $G = <V,E>$, a list of agent $R$, a starting point and a goal for each agent $O = <A,V,V>$.
 
 \subsection{Fluents and Events}
 
@@ -9,20 +9,119 @@ Event calculus is a sorted predicate calculus (with equality). There are the sor
 \begin{itemize}
   \item Timepoints : $\mathcal{T} = [0, 1, ... h]$.
   \item Fluents : $\forall r \in R, \forall v \in V, on(r,v) \in \mathcal{F}$ .
-  \item Actions : $\forall r \in R, \forall <v_o,v_d> \in E, move(r,v_o,v_e) \in \mathcal{A}$.
-  \item Domain object : $\mathcal{X} = [x_0, x_1, .. x_n]$.
+  \item Event : $\forall r \in R, \forall <v_o,v_d> \in E, move(r,v_o,v_d) \in \mathcal{E}$.
 \end{itemize}
 
-\subsection{The five predicates}
+\subsection{The four predicates}
 
 \begin{itemize}
   \item $happens \subseteq \mathcal{A}*\mathcal{T}$
   \item $holds\_at \subseteq \mathcal{F}*\mathcal{T}$
   \item $initiates \subseteq \mathcal{A}*\mathcal{F}*\mathcal{T}$
   \item $terminates \subseteq \mathcal{A}*\mathcal{F}*\mathcal{T}$
-  \item $<\ \subseteq \mathcal{T}*\mathcal{T}$
 \end{itemize}
 
 \subsection{Domain independant axioms}
 
-$$holds\_at(f,t_h) \leftarrow [happens(a,t_a)\ \land\ initiates(a,f,t_a)\ \land\ t_a<t_h\ \land\ other things probably]$$
+\subsubsection{Efect of events on fluents}
+
+If an event $e$ happens, and this event has the effect of starting $f$, then $f$ holds the moment after the event.
+\begin{equation}
+  \tag{E.1}
+  [happens(e,t-1)\ \land\ initiates(e,f,t-1)] \Rightarrow holds\_at(f,t)
+\end{equation}
+
+If an event $e$ happens, and this event has the effect of ending $f$, then $f$ don't holds the moment after the event.
+\begin{equation}
+  \tag{E.2}
+  [happens(e,t-1)\ \land\ terminates(e,f,t-1)] \Rightarrow \neg holds\_at(f,t)
+\end{equation}
+
+\subsubsection{Inertia}
+
+If a fluent $f$ holds and is not terminated, it continue to hold the next moment.
+\begin{multline}
+  \tag{E.3}
+$$[holds\_at(f,t-1)\ \land\ \neg\exists e(happens(e,t-1)\ \land\ terminates(e,f,t-1))] \\ \Rightarrow holds\_at(f,t)$$
+\end{multline}
+
+If a fluent $f$ don't holds and is not started, it continue to not hold the next moment.
+\begin{multline}
+  \tag{E.4}
+$$[\neg holds\_at(f,t-1)\ \land\ \neg\exists e(happens(e,t-1)\ \land\ initiates(e,f,t-1))] \\ \Rightarrow\neg holds\_at(f,t)$$
+\end{multline}
+
+\subsection{Domain dependant rules}
+
+List of the unique names.
+\begin{equation}
+  \tag{$\Omega$}
+  U[move,on]
+\end{equation}
+
+The agents have their starting vertices.
+\begin{equation}
+  \tag{$\Gamma$.i}
+  \forall <r,v_s,v_g>\ in\ O,holds\_at(on(r,v_s),0)
+\end{equation}
+
+The agents have their goals.
+\begin{equation}
+  \tag{$\Gamma$.f}
+  \forall <r,v_s,v_g>\ in\ O,holds\_at(on(r,v_g),h)
+\end{equation}
+
+For an agent to move, he must be on the vertice.
+\begin{equation}
+  \tag{$\Psi$.1}
+  happens(move(r,v_o,v_d),t) \Rightarrow holds\_at(on(r,v_o),t)
+\end{equation}
+
+If an agent move, it goes to another vertice.
+\begin{equation}
+  \tag{$\Sigma$.1}
+  \forall move(r,v_o,v_d) \in \mathcal{E},initiates(move(r,v_o,v_d),on(r,v_d),t)
+\end{equation}
+
+If an agent move, he left his vertice.
+\begin{equation}
+  \tag{$\Sigma$.2}
+  \forall move(r,v_o,v_d) \in \mathcal{E},terminates(move(r,v_o,v_d),on(r,v_o),t)
+\end{equation}
+
+A vertice has place for one agent only at each time.
+\begin{equation}
+  \tag{$\Psi$.2}
+  [holds\_at(on(r,v),t)\ \land\ r\neq r']\Rightarrow \neg holds\_at(on(r',v),t)
+\end{equation}
+
+An agent is on one vertice max at each time.
+\begin{equation}
+  \tag{$\Psi$.3}
+  [holds\_at(on(r,v),t)\ \land\ v\neq v']\Rightarrow \neg holds\_at(on(r,v'),t)
+\end{equation}
+
+Agents cannot switch places
+\begin{multline}
+  \tag{$\Psi$.4}
+  [holds\_at(on(r,v),t)\ \land\ holds\_at(on(r',v'),t)\ \land\ holds\_at(on(r',v),t+1) \\ \land\ v\neq v'\ \land\ r\neq r'] \Rightarrow \neg holds\_at(on(r,v'),t+1)
+\end{multline}
+
+\subsection{Domain description}
+\begin{equation}
+  \tag{$\Phi$}
+  CIRC[\Sigma;initiates,terminates] \land CIRC[\Delta;happens] \land \Omega \land \Psi \land \Gamma \land E
+\end{equation}
+\begin{itemize}
+  \item $\Sigma = \Sigma.1 \land \Sigma.2$
+  \item $\Delta$ being the cojunction of all event occurence formulas (aka the "happens facts")
+  \item $\Omega$
+  \item $\Psi = \Psi .1 \land \Psi .2 \land \Psi .3 \land \Psi .4$
+  \item $\Gamma$ being the cojunction of all observations (aka the "holds\_at facts") counting $\Gamma.i$ and $\Gamma.f$
+  \item $E = E.1 \land E.2 \land E.3 \land E.4$
+\end{itemize}
+
+\subsection{Planning}
+
+A planning problemm consist of taking $\Sigma$, $\Omega$, $\Psi$, $\Gamma$ (without $\Gamma.f$), $\Gamma.f$, and $E$ as input,
+and producing as output zero or more $\Delta$ (our plan) such as $\Phi$ is consistant and $\Phi\models\Gamma.f$.
