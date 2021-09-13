@@ -53,7 +53,7 @@ $$[\neg holds\_at(f,t-1)\ \land\ \neg\exists e(happens(e,t-1)\ \land\ initiates(
 
 \subsection{Domain dependant rules}
 
-List of the unique names.
+List of the unique names. \footnote{This is just to say that every on(something) is different to each move(something)}
 \begin{equation}
   \tag{$\Omega$}
   U[move,on]
@@ -61,13 +61,13 @@ List of the unique names.
 
 The agents have their starting vertices.
 \begin{equation}
-  \tag{$\Gamma$.i}
+  \tag{$\Gamma_i$}
   \forall <r,v_s,v_g>\ in\ O,holds\_at(on(r,v_s),0)
 \end{equation}
 
 The agents have their goals.
 \begin{equation}
-  \tag{$\Gamma$.f}
+  \tag{$\Gamma_f$}
   \forall <r,v_s,v_g>\ in\ O,holds\_at(on(r,v_g),h)
 \end{equation}
 
@@ -117,11 +117,11 @@ Agents cannot switch places
   \item $\Delta$ being the cojunction of all event occurence formulas (aka the "happens facts")
   \item $\Omega$
   \item $\Psi = \Psi .1 \land \Psi .2 \land \Psi .3 \land \Psi .4$
-  \item $\Gamma$ being the cojunction of all observations (aka the "holds\_at facts") counting $\Gamma.i$ and $\Gamma.f$
+  \item $\Gamma$ being the cojunction of all observations (aka the "holds\_at facts") counting $\Gamma_i$ and $\Gamma_f$
   \item $E = E.1 \land E.2 \land E.3 \land E.4$
 \end{itemize}
 
 \subsection{Planning}
 
-A planning problemm consist of taking $\Sigma$, $\Omega$, $\Psi$, $\Gamma$ (without $\Gamma.f$), $\Gamma.f$, and $E$ as input,
-and producing as output zero or more $\Delta$ (our plan) such as $\Phi$ is consistant and $\Phi\models\Gamma.f$.
+A planning problemm consist of taking $\Sigma$, $\Omega$, $\Psi$, $\Gamma$ (without $\Gamma_f$), $\Gamma_f$, and $E$ as input,
+and producing as output zero or more $\Delta$ (our plan) such as $\Phi$ is consistant and $\Phi\models\Gamma_f$.
