@@ -15,10 +15,10 @@ Event calculus is a sorted predicate calculus (with equality). There are the sor
 \subsection{The four predicates}
 
 \begin{itemize}
-  \item $happens \subseteq \mathcal{A}*\mathcal{T}$
+  \item $happens \subseteq \mathcal{E}*\mathcal{T}$
   \item $holds\_at \subseteq \mathcal{F}*\mathcal{T}$
-  \item $initiates \subseteq \mathcal{A}*\mathcal{F}*\mathcal{T}$
-  \item $terminates \subseteq \mathcal{A}*\mathcal{F}*\mathcal{T}$
+  \item $initiates \subseteq \mathcal{E}*\mathcal{F}*\mathcal{T}$
+  \item $terminates \subseteq \mathcal{E}*\mathcal{F}*\mathcal{T}$
 \end{itemize}
 
 \subsection{Domain independant axioms}
@@ -89,11 +89,13 @@ If an agent move, he left his vertice.
   \forall move(r,v_o,v_d) \in \mathcal{E},terminates(move(r,v_o,v_d),on(r,v_o),t)
 \end{equation}
 
+\iffalse
 A vertice has place for one agent only at each time.
 \begin{equation}
   \tag{$\Psi$.2}
   [holds\_at(on(r,v),t)\ \land\ r\neq r']\Rightarrow \neg holds\_at(on(r',v),t)
 \end{equation}
+\fi
 
 An agent is on one vertice max at each time.
 \begin{equation}
@@ -101,11 +103,13 @@ An agent is on one vertice max at each time.
   [holds\_at(on(r,v),t)\ \land\ v\neq v']\Rightarrow \neg holds\_at(on(r,v'),t)
 \end{equation}
 
+\iffalse
 Agents cannot switch places
 \begin{multline}
   \tag{$\Psi$.4}
   [holds\_at(on(r,v),t)\ \land\ holds\_at(on(r',v'),t)\ \land\ holds\_at(on(r',v),t+1) \\ \land\ v\neq v'\ \land\ r\neq r'] \Rightarrow \neg holds\_at(on(r,v'),t+1)
 \end{multline}
+\fi
 
 \subsection{Domain description}
 \begin{equation}
