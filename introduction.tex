@@ -21,7 +21,7 @@ Event calculus is a sorted predicate calculus (with equality). There are the sor
   \item $terminates \subseteq \mathcal{E}*\mathcal{F}*\mathcal{T}$
 \end{itemize}
 
-\subsection{Domain independant axioms}
+\subsection{E : Domain independant axioms}
 
 \subsubsection{Efect of events on fluents}
 
@@ -51,31 +51,7 @@ If a fluent $f$ don't holds and is not started, it continue to not hold the next
 $$[\neg holds\_at(f,t-1)\ \land\ \neg\exists e(happens(e,t-1)\ \land\ initiates(e,f,t-1))] \\ \Rightarrow\neg holds\_at(f,t)$$
 \end{multline}
 
-\subsection{Domain dependant rules}
-
-List of the unique names. \footnote{This is just to say that every on(something) is different to each move(something)}
-\begin{equation}
-  \tag{$\Omega$}
-  U[move,on]
-\end{equation}
-
-The agents have their starting vertices.
-\begin{equation}
-  \tag{$\Gamma_i$}
-  \forall <r,v_s,v_g>\ in\ O,holds\_at(on(r,v_s),0)
-\end{equation}
-
-The agents have their goals.
-\begin{equation}
-  \tag{$\Gamma_f$}
-  \forall <r,v_s,v_g>\ in\ O,holds\_at(on(r,v_g),h)
-\end{equation}
-
-For an agent to move, he must be on the vertice.
-\begin{equation}
-  \tag{$\Psi$.1}
-  happens(move(r,v_o,v_d),t) \Rightarrow holds\_at(on(r,v_o),t)
-\end{equation}
+\subsection{$\Sigma$ : Effects}
 
 If an agent move, it goes to another vertice.
 \begin{equation}
@@ -89,19 +65,41 @@ If an agent move, he left his vertice.
   \forall move(r,v_o,v_d) \in \mathcal{E},terminates(move(r,v_o,v_d),on(r,v_o),t)
 \end{equation}
 
-\iffalse
-A vertice has place for one agent only at each time.
+\subsection{$\Gamma$ : Observations}
+
+The agents have their starting vertices.
 \begin{equation}
-  \tag{$\Psi$.2}
-  [holds\_at(on(r,v),t)\ \land\ r\neq r']\Rightarrow \neg holds\_at(on(r',v),t)
+  \tag{$\Gamma_i$}
+  \forall <r,v_s,v_g>\ in\ O,holds\_at(on(r,v_s),0)
 \end{equation}
-\fi
+
+The agents have their goals.
+\begin{equation}
+  \tag{$\Gamma_f$}
+  \forall <r,v_s,v_g>\ in\ O,holds\_at(on(r,v_g),h)
+\end{equation}
+
+\subsection{$\Psi$ : Actions preconditions and State constraints}
+
+For an agent to move, he must be on the vertice.
+\begin{equation}
+  \tag{$\Psi$.1}
+  happens(move(r,v_o,v_d),t) \Rightarrow holds\_at(on(r,v_o),t)
+\end{equation}
 
 An agent is on one vertice max at each time.
 \begin{equation}
-  \tag{$\Psi$.3}
+  \tag{$\Psi$.2}
   [holds\_at(on(r,v),t)\ \land\ v\neq v']\Rightarrow \neg holds\_at(on(r,v'),t)
 \end{equation}
+
+\iffalse
+A vertice has place for one agent only at each time.
+\begin{equation}
+  \tag{$\Psi$.3}
+  [holds\_at(on(r,v),t)\ \land\ r\neq r']\Rightarrow \neg holds\_at(on(r',v),t)
+\end{equation}
+\fi
 
 \iffalse
 Agents cannot switch places
@@ -111,7 +109,16 @@ Agents cannot switch places
 \end{multline}
 \fi
 
+\subsection{$\Omega$ : Unique names}
+
+List of the unique names. \footnote{This is just to say that every on(something) is different to each move(something)}
+\begin{equation}
+  \tag{$\Omega$}
+  U[move,on]
+\end{equation}
+
 \subsection{Domain description}
+
 \begin{equation}
   \tag{$\Phi$}
   CIRC[\Sigma;initiates,terminates] \land CIRC[\Delta;happens] \land \Omega \land \Psi \land \Gamma \land E
