@@ -1,0 +1,155 @@
+\section{Path Finding in event Calculus}\label{sec:introduction}
+
+Given a graph $G = <V,E>$, a starting point $v_s$ and a goal $v_g$.
+
+\subsection{Fluents and Events}
+
+Event calculus is a sorted predicate calculus (with equality).
+Here I will describe a very simple variant with only the most important aspect of Event Calculus.
+
+There are the sorts:
+
+\begin{itemize}
+  \item $\mathcal{T}$ Timepoints : $\mathcal{T} = [0, 1, ... h]$.
+  \item $\mathcal{F}$ Fluents : $\forall v \in V, on(v) \in \mathcal{F}$ .
+  \item $\mathcal{E}$ Event : $\forall <v_o,v_d> \in E, move(v_o,v_d) \in \mathcal{E}$.
+\end{itemize}
+
+\subsection{The four predicates}
+
+\begin{itemize}
+  \item $happens \subseteq \mathcal{E}*\mathcal{T}$
+  \item $holds\_at \subseteq \mathcal{F}*\mathcal{T}$
+  \item $initiates \subseteq \mathcal{E}*\mathcal{F}*\mathcal{T}$
+  \item $terminates \subseteq \mathcal{E}*\mathcal{F}*\mathcal{T}$
+\end{itemize}
+
+\subsection{E : Domain independant axioms}
+
+Thoses axioms are the ones who are present no matter the domain.
+All the other formulas on this paper are examples for path finding.
+
+\subsubsection{Efect of events on fluents}
+
+If an event $e$ happens, and this event has the effect of starting $f$, then $f$ holds the moment after the event.
+\begin{equation}
+  \tag{E.1}
+  [happens(e,t-1)\ \land\ initiates(e,f,t-1)] \Rightarrow holds\_at(f,t)
+\end{equation}
+
+If an event $e$ happens, and this event has the effect of ending $f$, then $f$ don't holds the moment after the event.
+\begin{equation}
+  \tag{E.2}
+  [happens(e,t-1)\ \land\ terminates(e,f,t-1)] \Rightarrow \neg holds\_at(f,t)
+\end{equation}
+
+\subsubsection{Inertia}
+
+If a fluent $f$ holds and is not terminated, it continue to hold the next moment.
+\begin{multline}
+  \tag{E.3}
+$$[holds\_at(f,t-1)\ \land\ \neg\exists e(happens(e,t-1)\ \land\ terminates(e,f,t-1))] \\ \Rightarrow holds\_at(f,t)$$
+\end{multline}
+
+If a fluent $f$ don't holds and is not started, it continue to not hold the next moment.
+\begin{multline}
+  \tag{E.4}
+$$[\neg holds\_at(f,t-1)\ \land\ \neg\exists e(happens(e,t-1)\ \land\ initiates(e,f,t-1))] \\ \Rightarrow\neg holds\_at(f,t)$$
+\end{multline}
+
+\subsection{$\Sigma$ : Effects}
+
+Those formulas defines the effects of actions. What actions make a fluent true, and what actions make a fluent false.
+
+If an agent move, it goes to another vertex.
+\begin{equation}
+  \tag{$\Sigma$.1}
+  \forall move(v_o,v_d) \in \mathcal{E},initiates(move(v_o,v_d),on(v_d),t)
+\end{equation}
+
+If an agent move, he left his vertex.
+\begin{equation}
+  \tag{$\Sigma$.2}
+  \forall move(v_o,v_d) \in \mathcal{E},terminates(move(v_o,v_d),on(v_o),t)
+\end{equation}
+
+\subsection{$\Gamma$ : Observations}
+
+Those formulas are observed facts about which fluent holds when.
+
+The agent has his starting vertex.
+\begin{equation}
+  \tag{$\Gamma_i$}
+  holds\_at(on(v_s),0)
+\end{equation}
+
+The agent has his goal.
+\begin{equation}
+  \tag{$\Gamma_f$}
+  holds\_at(on(v_g),h)
+\end{equation}
+
+\subsection{$\Delta$ : Narrative}
+
+Those formulas are observed facts about which action happens when.
+
+In our case, we don't know about them. But we could have facts like this to force a move at some point:
+\begin{equation}
+  \tag{$example$}
+  happens(move(v_2,v_4),2)
+\end{equation}
+
+\subsection{$\Psi$ : Actions preconditions and State constraints}
+
+Thoses formulas are other conditions on the fluents. Things like "if those fluent holds, this one can't" for example.
+
+For an agent to move, he must be on the vertex.
+\begin{equation}
+  \tag{$\Psi$.1}
+  happens(move(v_o,v_d),t) \Rightarrow holds\_at(on(v_o),t)
+\end{equation}
+
+An agent is on one vertex max at each time.
+\begin{equation}
+  \tag{$\Psi$.2}
+  [holds\_at(on(v),t)\ \land\ v\neq v']\Rightarrow \neg holds\_at(on(v'),t)
+\end{equation}
+
+\iffalse
+A vertex has place for one agent only at each time.
+\begin{equation}
+  \tag{$\Psi$.3}
+  [holds\_at(on(r,v),t)\ \land\ r\neq r']\Rightarrow \neg holds\_at(on(r',v),t)
+\end{equation}
+\fi
+
+\iffalse
+Agents cannot switch places
+\begin{multline}
+  \tag{$\Psi$.4}
+  [holds\_at(on(r,v),t)\ \land\ holds\_at(on(r',v'),t)\ \land\ holds\_at(on(r',v),t+1) \\ \land\ v\neq v'\ \land\ r\neq r'] \Rightarrow \neg holds\_at(on(r,v'),t+1)
+\end{multline}
+\fi
+
+\subsection{$\Omega$ : Unique names}
+
+List of the unique names. \footnote{This is just to say that every on(something) is different to each move(something)}
+\begin{equation}
+  \tag{$\Omega$}
+  U[move,on]
+\end{equation}
+
+\subsection{Domain description}
+
+\begin{equation}
+  \tag{$\Phi$}
+  CIRC[\Sigma;initiates,terminates] \land CIRC[\Delta;happens] \land \Omega \land \Psi \land \Gamma \land E
+\end{equation}
+\begin{itemize}
+  \item $\Sigma = \Sigma.1 \land \Sigma.2$
+  \item $\Delta$ being the conjunction of all event occurrence formulas (aka the "happens facts")
+  \item $\Omega$
+  \item $\Psi = \Psi .1 \land \Psi .2 \land \Psi .3 \land \Psi .4$
+  \item $\Gamma$ being the conjunction of all observations (aka the "holds\_at facts") counting $\Gamma_i$ and $\Gamma_f$
+  \item $E = E.1 \land E.2 \land E.3 \land E.4$
+\end{itemize}

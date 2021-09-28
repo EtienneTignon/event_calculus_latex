@@ -1,0 +1,20 @@
+\section{Planning}\label{sec:planning}
+
+A planning problem consist of taking $\Sigma$, $\Omega$, $\Psi$, $\Gamma$ (without $\Gamma_f$), $\Gamma_f$, and $E$ as input,
+and producing as output zero or more $\Delta$ (our plan) such as $\Phi$ is consistent and $\Phi\models\Gamma_f$.
+
+To do it:
+
+\begin{enumerate}
+  \item Write every element of $\Gamma_f$ as a constraints.
+  \begin{equation}
+    \tag{$\Gamma '$}
+    \forall \gamma \in \Gamma_f, \neg \gamma \Rightarrow \bot
+  \end{equation}
+  \item Don't use circumscription on "$happens$". (After all we want to deduce them!)
+  \item Find model(s) of $\Phi '$
+  \begin{equation}
+    \tag{$\Phi '$}
+    CIRC[\Sigma;initiates,terminates] \land \Delta \land \Omega \land \Psi \land \Gamma \land \Gamma ' \land E
+  \end{equation}
+\end{enumerate}
