@@ -1,11 +1,12 @@
-# Latex Paper Template
+# Event Calculus, an introduction
 
-This contains a simple template including our bibliography and comments style
-setup to build with [latexmk] out of the box.
+This paper is a presentation of Event Calculus (in a barebone, simplified version).
+Event calculus is a way to represent reasoning about events and how they interacts with the world around them. It is an extention of first order logic, and can represent concept like consequences of action, inertia, impossible state of the world, etc.
 
-Please read our [collaboration guide][guide] before using this template.
+To show how it works, I use Pathfinding as an example.
+For now, it only show the formulas needed to define pathfinding in Event Calculus, and present a way to abduct the plan.
 
-## Building
+## Building the paper
 
 Before building this paper, the following packages need to be installed:
 
@@ -17,17 +18,3 @@ A [Makefile](Makefile) is provided to build the paper:
 ```sh
 $ make
 ```
-
-If you use this repository as a template, note that github does not properly
-carry over submodules. Just run
-
-```sh
-$ make init
-```
-
-to add the required submodules. Afterward, you should add/commit/push the
-changes.
-
-[install]: https://latextools.readthedocs.io/en/latest/install/
-[latexmk]: https://ctan.org/pkg/latexmk
-[guide]: https://github.com/krr-up/latex-collaboration-guide
