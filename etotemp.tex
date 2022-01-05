@@ -1,0 +1,22 @@
+\section{Translating E to TEL}\label{sec:etotemp}
+
+This section will describe a translation of the Action Langage E (which closely ressemble Event Calculus in multiples ways) into Temporal Logic.
+To be more precise, into LTL.
+
+\subsection{naive approach}
+
+To make the translation, we need to start from a domain langage for wich $\Pi$ is a discrete set of timepoint, and $\preceq$ is a total ordering of $\Pi$. On top of that, $\Pi$ need a timepoint $T_0$ such as $\forall T_i \in \Pi, T_0\preceq T_i$.
+
+\subsubsection{Propositions}
+
+\begin{itemize}
+  \item c-proposition
+
+  $$\box(A_i\bigwedge C_i)\rightarrow \circ F_i$$ or $$\box(A_i\bigwedge C_i)\rightarrow \circ \neg F_i$$
+  \item h-proposition
+
+  $$\circ^{T_i}F_i$$ or $$\circ^{T_i} \neg F_i$$
+  \item t-proposition
+
+  $$\circ^{T_i}A_i$$
+\end{itemize}
