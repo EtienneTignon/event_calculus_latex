@@ -1,7 +1,9 @@
 \section{Translating E to TEL}\label{sec:etotemp}
 
 This section will describe a translation of the Action Langage E (which closely ressemble Event Calculus in multiples ways) into Temporal Logic.
-To be more precise, into LTL.
+To be more precise, into $LTL_f$.
+
+The goal is to start from a domaine langage $E=<\Pi,\preceq,\Delta,\Phi>$ and a domain description $D=<\gamma,\eta,\tau>$, and to get a set of temporal preposition $A$ and formulas $F$, such that all formulas of $F$ are true for a finite traces $\pi$ if and only if the corresponding interpretation $H$ of $E$ is a model of $D$.
 
 \subsection{Naive approach}
 
@@ -9,9 +11,12 @@ To be more precise, into LTL.
 
 To make the translation, we need to start from a domain langage for wich $\Pi$ is a discrete set of timepoint, and $\preceq$ is a total ordering of $\Pi$.
 
+The set $A$ of propositional atoms is composed of the atoms $a_i$, $f_i$, $initiation(f_i)$ and $termination(f_i)$ that will be defined later in this section.
+
 \begin{itemize}
-  \item $\Pi$ and $\preceq$ can be represented by a trace of "the same size". (with a $\circ^{t_f}final$ or something liek that)
-  \item
+  \item $\Pi$ and $\preceq$ can be represented by a trace $\pi$ of the same size. (with a $\circ^{t_f}final$ or something like that)
+  \item For all $A_i$ in $\Delta$ there is a propositional variable $a_i$.
+  \item For all $F_i$ in $\Phi$ there is a propositional variable $f_i$.
 \end{itemize}
 
 \subsubsection{Axiomes}
@@ -27,9 +32,9 @@ To make the translation, we need to start from a domain langage for wich $\Pi$ i
 \subsubsection{Translationg the Domain Definition}
 
 \begin{itemize}
-  \item c-proposition
+  \item c-proposition\footnone{c-proposition's translation also contains the definition of initiation and termination point for the temporal logic}
 
-  $$\Box(a_i\bigwedge c_i)\rightarrow \circ f_i$$ or $$\Box(a_i\bigwedge c_i)\rightarrow \circ \neg f_i$$
+  $$\Box(a_i\bigwedge c_i)\rightarrow initiation(f_i)$$ or $$\Box(a_i\bigwedge c_i)\rightarrow termination(f_i)$$
   \item h-proposition
 
   $$\circ^{t_i}f_i$$ or $$\circ^{t_i} \neg f_i$$
