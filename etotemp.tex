@@ -14,7 +14,7 @@ To make the translation, we need to start from a domain langage for wich $\Pi$ i
 The set $A$ of propositional atoms is composed of the atoms $a_i$, $f_i$, $initiation(f_i)$ and $termination(f_i)$.
 
 \begin{itemize}
-  \item $\Pi$ and $\preceq$ can be represented by a trace $\pi$ of the same size. (with a $\circ^{t_f}final$ or something like that)
+  \item $\Pi$ and $\preceq$ can be represented by a trace $\pi$ of the same size. (with a $\circ^{t_f}Tail$ or something like that)
   \item For all $A_i$ in $\Delta$ there is a propositional variable $a_i$.
   \item For all $F_i$ in $\Phi$ there is a propositional variable $f_i$ and two propositional variables $initiation(f_i)$ and $termination(f_i)$.
 \end{itemize}
@@ -90,14 +90,14 @@ Once translated we get :
 
 We can see that the original domain description had two models:
 \begin{itemize}
-  \item H(light,t0)=H(light,t1)=H(light,t4)=true and H(light,t2)=H(light,t3)=false
-  \item H(light,t0)=H(light,t1)=H(light,t4)=false and H(light,t2)=H(light,t3)=true
+  \item $H(light,t_0)=H(light,t_1)=H(light,t_4)=true and H(light,t_2)=H(light,t_3)=false$
+  \item $H(light,t_0)=H(light,t_1)=H(light,t_4)=false and H(light,t_2)=H(light,t_3)=true$
 \end{itemize}
 
 Likewise, the resulting set of formulas only has two traces that respect them:
 \begin{itemize}
-  \item {light}{light,switch,termination(light)}{}{switch,initiation(light)}{light}
-  \item {}{switch,initiation(light)}{light}{light,switch,termination(light)}{}
+  \item $\{light\}\{light,switch,termination(light)\}\{\}\{switch,initiation(light)\}\{light\}$
+  \item $\{\}\{switch,initiation(light)\}\{light\}\{light,switch,termination(light)\}\{\}$
 \end{itemize}
 
           \iffalse
