@@ -3,7 +3,7 @@
 This section will describe a translation of the Action Langage E (which closely ressemble Event Calculus in multiples ways) into Temporal Logic.
 To be more precise, into $LTL_f$.
 
-The goal is to start from a domaine langage $E=<\Pi,\preceq,\Delta,\Phi>$ and a domain description $D=<\gamma,\eta,\tau>$, and to get a set of temporal preposition $A$ and formulas $F$, such that all formulas of $F$ are true for a finite traces $\pi$ if and only if the corresponding interpretation $H$ of $E$ is a model of $D$.
+The goal is to start from a domaine langage $E=<\Pi,\preceq,\Delta,\Phi>$ and a domain description $D=<\gamma,\eta,\tau>$, and to get a set of temporal propositions $A$ and formulas $F$, such that all formulas of $F$ are true for a finite traces $\pi$ if and only if the corresponding interpretation $H$ of $E$ is a model of $D$.
 
 \subsection{Naive approach}
 
@@ -11,12 +11,12 @@ The goal is to start from a domaine langage $E=<\Pi,\preceq,\Delta,\Phi>$ and a 
 
 To make the translation, we need to start from a domain langage for wich $\Pi$ is a discrete set of timepoint, and $\preceq$ is a total ordering of $\Pi$.
 
-The set $A$ of propositional atoms is composed of the atoms $a_i$, $f_i$, $initiation(f_i)$ and $termination(f_i)$ that will be defined later in this section.
+The set $A$ of propositional atoms is composed of the atoms $a_i$, $f_i$, $initiation(f_i)$ and $termination(f_i)$.
 
 \begin{itemize}
   \item $\Pi$ and $\preceq$ can be represented by a trace $\pi$ of the same size. (with a $\circ^{t_f}final$ or something like that)
   \item For all $A_i$ in $\Delta$ there is a propositional variable $a_i$.
-  \item For all $F_i$ in $\Phi$ there is a propositional variable $f_i$.
+  \item For all $F_i$ in $\Phi$ there is a propositional variable $f_i$ and two propositional variables $initiation(f_i)$ and $termination(f_i)$.
 \end{itemize}
 
 \subsubsection{Axiomes}
@@ -25,14 +25,16 @@ The set $A$ of propositional atoms is composed of the atoms $a_i$, $f_i$, $initi
   \item Common Inertia
   $$\Box(f_i\rightarrow\circ (termination(f_i) \mathbin{\bm{\mathsf{R}}} f_i))$$
   $$\Box(\neg f_i\rightarrow\circ (initiation(f_i) \mathbin{\bm{\mathsf{R}}} \neg f_i))$$
-  \item Initiation Inertia $$\Box(initiation(f_i)\rightarrow\circ (termination(f_i) \mathbin{\bm{\mathsf{R}}} f_i))$$
-  \item Termination Inertia $$\Box(termination(f_i)\rightarrow\circ (initiation(f_i) \mathbin{\bm{\mathsf{R}}} \neg f_i))$$
+  \item Initiation Inertia $$\Box(initiation(f_i)\rightarrow\circ f_i)$$
+  \item Termination Inertia $$\Box(termination(f_i)\rightarrow\circ \neg f_i)$$
+%  \item Initiation Inertia $$\Box(initiation(f_i)\rightarrow\circ (termination(f_i) \mathbin{\bm{\mathsf{R}}} f_i))$$
+%  \item Termination Inertia $$\Box(termination(f_i)\rightarrow\circ (initiation(f_i) \mathbin{\bm{\mathsf{R}}} \neg f_i))$$
 \end{itemize}
 
 \subsubsection{Translationg the Domain Definition}
 
 \begin{itemize}
-  \item c-proposition\footnone{c-proposition's translation also contains the definition of initiation and termination point for the temporal logic}
+  \item c-proposition\footnote{c-proposition's translation also contains the definition of initiation and termination point for the temporal logic}
 
   $$\Box(a_i\bigwedge c_i)\rightarrow initiation(f_i)$$ or $$\Box(a_i\bigwedge c_i)\rightarrow termination(f_i)$$
   \item h-proposition
@@ -43,24 +45,79 @@ The set $A$ of propositional atoms is composed of the atoms $a_i$, $f_i$, $initi
   $$\circ^{t_i}a_i$$
 \end{itemize}
 
-\iffalse
+\subsubsection{Example}
 
-\subsection{Naive approach from iterative}
-
-To make the translation, we need to start from a domain langage for wich $\Pi$ is a discrete set of timepoint, and $\preceq$ is a total ordering of $\Pi$. On top of that, $\Pi$ need a timepoint $T_0$ such as $\forall T_i \in \Pi, T_0\preceq T_i$.
-
-\subsubsection{Propositions}
-
+Let's take a domaine langage $E=<\Pi,\preceq,\Delta,\Phi>$ with :
 \begin{itemize}
-  \item c-proposition
-
-  $$\Box(A_i\bigwedge C_i)\rightarrow \circ F_i$$ or $$\Box(A_i\bigwedge C_i)\rightarrow \circ \neg F_i$$
-  \item h-proposition
-
-  $$\circ^{T_i}F_i$$ or $$\circ^{T_i} \neg F_i$$
-  \item t-proposition
-
-  $$\circ^{T_i}A_i$$
+  \item $\Pi$ composed of 5 timepoints $t_0$ to $t_4$
+  \item $\Delta$ only composed of the action $switch$
+  \item $\Phi$ only composed of the action $light$
 \end{itemize}
 
-\fi
+Let's take a domain description $D=<\gamma,\eta,\tau>$ with :
+\begin{itemize}
+  \item $\gamma$ composed of two c-proposition :
+  \begin{itemize}
+    \item $switch$ initiates $light$ when $\neg light$.
+    \item $switch$ initiates $\neg light$ when $light$.
+  \end{itemize}
+  \item $\eta$ composed of two h-proposition :
+  \begin{itemize}
+    \item $switch$ happens-at $t_1$.
+    \item $switch$ happens-at $t_3$.
+  \end{itemize}
+  \item $\tau$ composed of no t-proposition.
+\end{itemize}
+
+Once translated we get :
+\begin{itemize}
+  \item The lengh of the trace $lengh(/pi)=5$.
+  \item The set of propositions $A$ composed of $switch$, $light$, $initiation(light)$ and $termination(light)$.
+  \item The set of formulas $F$ composed of :
+  \begin{itemize}
+    \item The formulas taken from the propositions :
+    \item $\Box(switch\bigwedge \neg light)\rightarrow initiation(light)$
+    \item $\Box(switch\bigwedge light)\rightarrow termination(light)$
+    \item $\circ^{1}switch$
+    \item $\circ^{3}switch$
+    \item The formulas taken from the inertia axiomes :
+    \item $\Box(light\rightarrow\circ (termination(light) \mathbin{\bm{\mathsf{R}}} light))$
+    \item $\Box(\neg light\rightarrow\circ (initiation(light) \mathbin{\bm{\mathsf{R}}} \neg light))$
+    \item $\Box(initiation(light)\rightarrow\circ light)$
+    \item $\Box(termination(light)\rightarrow\circ \neg light)$
+  \end{itemize}
+\end{itemize}
+
+We can see that the original domain description had two models:
+\begin{itemize}
+  \item H(light,t0)=H(light,t1)=H(light,t4)=true and H(light,t2)=H(light,t3)=false
+  \item H(light,t0)=H(light,t1)=H(light,t4)=false and H(light,t2)=H(light,t3)=true
+\end{itemize}
+
+Likewise, the resulting set of formulas only has two traces that respect them:
+\begin{itemize}
+  \item {light}{light,switch,termination(light)}{}{switch,initiation(light)}{light}
+  \item {}{switch,initiation(light)}{light}{light,switch,termination(light)}{}
+\end{itemize}
+
+          \iffalse
+
+          \subsection{Naive approach from iterative}
+
+          To make the translation, we need to start from a domain langage for wich $\Pi$ is a discrete set of timepoint, and $\preceq$ is a total ordering of $\Pi$. On top of that, $\Pi$ need a timepoint $T_0$ such as $\forall T_i \in \Pi, T_0\preceq T_i$.
+
+          \subsubsection{Propositions}
+
+          \begin{itemize}
+            \item c-proposition
+
+            $$\Box(A_i\bigwedge C_i)\rightarrow \circ F_i$$ or $$\Box(A_i\bigwedge C_i)\rightarrow \circ \neg F_i$$
+            \item h-proposition
+
+            $$\circ^{T_i}F_i$$ or $$\circ^{T_i} \neg F_i$$
+            \item t-proposition
+
+            $$\circ^{T_i}A_i$$
+          \end{itemize}
+
+          \fi
